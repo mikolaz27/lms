@@ -16,6 +16,8 @@ darker = "*"
 webargs = "*"
 black = "*"
 django-crispy-forms = "*"
+django-phonenumber-field = "*"
+phonenumbers = "*"
 
 [requires]
 python_version = "3.9"

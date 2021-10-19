@@ -16,7 +16,7 @@ Including another URLconf
 from django.urls import path
 from students.views import (hello, get_students, create_student,
                             update_student,
-                            delete_student)
+                            delete_student, create_teacher)
 
 app_name = "students"
 
@@ -24,5 +24,6 @@ urlpatterns = [
     path("", get_students, name="list"),
     path("create/", create_student, name="create"),
     path("update/<int:pk>/", update_student, name="update"),
+    path("create-teacher/", create_teacher, name="create-teacher"),
     path("delete/<int:pk>/", delete_student, name="delete"),
 ]

@@ -1,14 +1,14 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, TextInput
-from students.models import Student
+from students.models import Student, Teacher
 
 
-class StudentBaseForm(ModelForm):
+class PersonBaseForm(ModelForm):
     class Meta:
         model = Student
-        fields = ["first_name", "last_name", "email", "phone_number"]
+        fields = ["first_name", "last_name", "email", "phone_number",
+                  "course"]
 
-        widgets = {"phone_number": TextInput(attrs={"pattern": "\d{10,14}"})}
 
     @staticmethod
     def normalize_name(name):
@@ -35,10 +35,21 @@ class StudentBaseForm(ModelForm):
         return cleaned_data
 
 
-class StudentCreateForm(StudentBaseForm):
+class StudentCreateForm(PersonBaseForm):
     pass
 
 
-class StudentUpdateForm(StudentBaseForm):
-    class Meta(StudentBaseForm.Meta):
-        fields = ["first_name", "last_name", "email", "phone_number", "birthdate"]
+class StudentUpdateForm(PersonBaseForm):
+    class Meta(PersonBaseForm.Meta):
+        fields = ["first_name", "last_name", "email", "phone_number",
+                  "birthdate"]
+
+
+class TeacherBaseForm(PersonBaseForm):
+    class Meta:
+        model = Teacher
+        fields = ["first_name", "last_name", "email", "phone_number",
+                  "course"]
+
+        widgets = {
+            "phone_number": TextInput(attrs={"pattern": "\d{10,14}"})}

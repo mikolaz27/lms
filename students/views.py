@@ -7,11 +7,12 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from webargs import fields
 
-from students.forms import StudentCreateForm
+from students.forms import StudentCreateForm, TeacherBaseForm
 from students.models import Student
 from students.utils import format_records
 from django.core.exceptions import BadRequest
 from webargs import djangoparser
+from django.contrib.auth.models import User
 
 
 def hello(request):
@@ -78,6 +79,24 @@ def create_student(request):
     return render(
         request=request,
         template_name="students_create.html",
+        context={"form": form}
+    )
+
+
+@csrf_exempt
+def create_teacher(request):
+    if request.method == "POST":
+        form = TeacherBaseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("students:list"))
+
+    elif request.method == "GET":
+        form = TeacherBaseForm()
+
+    return render(
+        request=request,
+        template_name="teacher_create.html",
         context={"form": form}
     )
 

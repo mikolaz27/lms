@@ -36,8 +36,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "crispy_forms",
-    "django_extensions",
+    'phonenumber_field',
     "students",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
