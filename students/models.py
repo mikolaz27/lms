@@ -5,7 +5,6 @@ from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-# Create your models here.
 from faker import Faker
 
 from students.validators import no_elon_validator
@@ -18,15 +17,12 @@ class Person(models.Model):
     last_name = models.CharField(
         max_length=80, null=False, validators=[MinLengthValidator(2)]
     )
-    email = models.EmailField(max_length=120, null=True,
-                              validators=[no_elon_validator])
-    #
-    # phone_number = models.CharField(
-    #     null=True, max_length=14, unique=True,
-    #     validators=[RegexValidator("\d{10,14}")]
-    # )
-    #
-    phone_number = PhoneNumberField(unique=True, null=True, )
+    email = models.EmailField(max_length=120, null=True, validators=[no_elon_validator])
+
+    phone_number = PhoneNumberField(
+        unique=True,
+        null=True,
+    )
 
     class Meta:
         abstract = True
@@ -35,9 +31,9 @@ class Person(models.Model):
 class Student(Person):
     birthdate = models.DateField(null=True, default=datetime.date.today)
 
-    course = models.ForeignKey("students.Course",
-                               null=True,
-                               on_delete=models.SET_NULL)
+    course = models.ForeignKey(
+        "students.Course", null=True, related_name="students", on_delete=models.SET_NULL
+    )
 
     def __str__(self):
         return f"{self.full_name()}, {self.age()}, {self.email} ({self.id})"
@@ -56,26 +52,41 @@ class Student(Person):
                 first_name=faker.first_name(),
                 last_name=faker.last_name(),
                 email=faker.email(),
-                birthdate=faker.date_time_between(start_date="-30y",
-                                                  end_date="-18y"),
+                birthdate=faker.date_time_between(start_date="-30y", end_date="-18y"),
             )
             st.save()
 
 
 class Course(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True,
-                          default=uuid.uuid4,
-                          editable=False)
+    id = models.UUIDField(
+        primary_key=True, unique=True, default=uuid.uuid4, editable=False
+    )
     name = models.CharField(null=False, max_length=100)
     start_date = models.DateField(null=True, default=datetime.date.today())
     count_of_students = models.IntegerField(default=0)
+    room = models.ForeignKey(
+        "students.Room", null=True, related_name="courses", on_delete=models.SET_NULL
+    )
 
     def __str__(self):
         return f"{self.name}"
 
 
 class Teacher(Person):
-    course = models.ManyToManyField(to="students.Course")
+    course = models.ManyToManyField(to="students.Course", related_name="teachers")
 
     def __str__(self):
         return f"{self.email} ({self.id})"
+
+
+class Room(models.Model):
+    location = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+    )
+    color = models.ForeignKey("students.Color", null=True, on_delete=models.SET_NULL)
+
+
+class Color(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)

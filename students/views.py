@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from webargs import fields
 
 from students.forms import StudentCreateForm, TeacherBaseForm
-from students.models import Student
+from students.models import *
 from students.utils import format_records
 from django.core.exceptions import BadRequest
 from webargs import djangoparser
@@ -61,11 +61,10 @@ def get_students(request, params):
     return render(
         request=request,
         template_name="students_table.html",
-        context={"students_list": students}
+        context={"students_list": students},
     )
 
 
-@csrf_exempt
 def create_student(request):
     if request.method == "POST":
         form = StudentCreateForm(request.POST)
@@ -77,9 +76,7 @@ def create_student(request):
         form = StudentCreateForm()
 
     return render(
-        request=request,
-        template_name="students_create.html",
-        context={"form": form}
+        request=request, template_name="students_create.html", context={"form": form}
     )
 
 
@@ -95,9 +92,7 @@ def create_teacher(request):
         form = TeacherBaseForm()
 
     return render(
-        request=request,
-        template_name="teacher_create.html",
-        context={"form": form}
+        request=request, template_name="teacher_create.html", context={"form": form}
     )
 
 
@@ -129,3 +124,41 @@ def update_student(request, pk):
     """
 
     return HttpResponse(form_html)
+
+
+def test_view(request):
+    # 1.
+    # my_student_1 = Course.objects.first()
+    # course = Course.objects.get(id="482fdb3c-3a7f-4750-913a-65a8b091a7ab")
+    # print(type(my_student.course))
+    # print(type(my_student_1.course))
+    # print(type(my_student.course))
+    # print(course.)
+    # students = Student.objects.filter(course__name__contains="In")
+    # print(Student.objects.filter(course=))
+    # print(Student.objects)
+    # print(type(course.students))
+
+    # for i in range(100):
+    #     new_color = Color()
+    #     new_color.name = "red"
+    #     new_color.save()
+
+    data_to_save = []
+    course = Course.objects.get(id="482fdb3c-3a7f-4750-913a-65a8b091a7ab")
+
+    for i in range(1000):
+        new_student = Student()
+        new_student.first_name = "12"
+        new_student.last_name = "12"
+        new_student.email = "test"
+        new_student.course = course
+        data_to_save.append(new_student)
+        # new_color.save()
+
+    Student.objects.bulk_create(data_to_save)
+
+
+    student = Student.objects.filter(course__room__color__name__contains="red")
+
+    return HttpResponse(student)

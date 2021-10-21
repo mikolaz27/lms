@@ -11,29 +11,83 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Course',
+            name="Course",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('start_date', models.DateField(default=datetime.date(2021, 10, 18), null=True)),
-                ('count_of_students', models.IntegerField(default=0)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "start_date",
+                    models.DateField(default=datetime.date(2021, 10, 18), null=True),
+                ),
+                ("count_of_students", models.IntegerField(default=0)),
             ],
         ),
         migrations.CreateModel(
-            name='Student',
+            name="Student",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(max_length=60, validators=[django.core.validators.MinLengthValidator(2)])),
-                ('last_name', models.CharField(max_length=80, validators=[django.core.validators.MinLengthValidator(2)])),
-                ('email', models.EmailField(max_length=120, null=True, validators=[students.validators.no_elon_validator])),
-                ('birthdate', models.DateField(default=datetime.date.today, null=True)),
-                ('phone_number', models.CharField(max_length=14, null=True, unique=True, validators=[django.core.validators.RegexValidator('\\d{10,14}')])),
-                ('course', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='students.course')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(
+                        max_length=60,
+                        validators=[django.core.validators.MinLengthValidator(2)],
+                    ),
+                ),
+                (
+                    "last_name",
+                    models.CharField(
+                        max_length=80,
+                        validators=[django.core.validators.MinLengthValidator(2)],
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        max_length=120,
+                        null=True,
+                        validators=[students.validators.no_elon_validator],
+                    ),
+                ),
+                ("birthdate", models.DateField(default=datetime.date.today, null=True)),
+                (
+                    "phone_number",
+                    models.CharField(
+                        max_length=14,
+                        null=True,
+                        unique=True,
+                        validators=[
+                            django.core.validators.RegexValidator("\\d{10,14}")
+                        ],
+                    ),
+                ),
+                (
+                    "course",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="students.course",
+                    ),
+                ),
             ],
         ),
     ]

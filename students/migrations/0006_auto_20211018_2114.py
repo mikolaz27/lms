@@ -7,18 +7,22 @@ import phonenumber_field.modelfields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('students', '0005_alter_course_id'),
+        ("students", "0005_alter_course_id"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='student',
-            name='phone_number',
-            field=phonenumber_field.modelfields.PhoneNumberField(max_length=128, null=True, region=None, unique=True),
+            model_name="student",
+            name="phone_number",
+            field=phonenumber_field.modelfields.PhoneNumberField(
+                max_length=128, null=True, region=None, unique=True
+            ),
         ),
         migrations.AlterField(
-            model_name='teacher',
-            name='phone_number',
-            field=phonenumber_field.modelfields.PhoneNumberField(max_length=128, null=True, region=None, unique=True),
+            model_name="teacher",
+            name="phone_number",
+            field=phonenumber_field.modelfields.PhoneNumberField(
+                max_length=128, null=True, region=None, unique=True
+            ),
         ),
     ]

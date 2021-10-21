@@ -6,9 +6,7 @@ from students.models import Student, Teacher
 class PersonBaseForm(ModelForm):
     class Meta:
         model = Student
-        fields = ["first_name", "last_name", "email", "phone_number",
-                  "course"]
-
+        fields = ["first_name", "last_name", "email", "phone_number", "course"]
 
     @staticmethod
     def normalize_name(name):
@@ -41,15 +39,14 @@ class StudentCreateForm(PersonBaseForm):
 
 class StudentUpdateForm(PersonBaseForm):
     class Meta(PersonBaseForm.Meta):
-        fields = ["first_name", "last_name", "email", "phone_number",
-                  "birthdate"]
+        fields = ["first_name", "last_name", "email", "phone_number", "birthdate"]
 
 
 class TeacherBaseForm(PersonBaseForm):
     class Meta:
         model = Teacher
-        fields = ["first_name", "last_name", "email", "phone_number",
-                  "course"]
+        fields = ["first_name", "last_name", "email", "phone_number", "course"]
 
         widgets = {
-            "phone_number": TextInput(attrs={"pattern": "\d{10,14}"})}
+            "phone_number": TextInput(attrs={"pattern": "\d{10,14}", "label": ""})
+        }
