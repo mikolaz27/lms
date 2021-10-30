@@ -17,20 +17,23 @@ from django.urls import path
 from students.views import (
     hello,
     get_students,
-    create_student,
+    # create_student,
     update_student,
     delete_student,
     create_teacher,
     test_view,
+    search_view, CreateStudent, UpdateStudent, LoginStudent
 )
 
 app_name = "students"
 
 urlpatterns = [
     path("", get_students, name="list"),
-    path("create/", create_student, name="create"),
-    path("update/<int:pk>/", update_student, name="update"),
+    path("create/", CreateStudent.as_view(), name="create"),
+    path("update/<int:pik>/", UpdateStudent.as_view(), name="update"),
     path("create-teacher/", create_teacher, name="create-teacher"),
     path("delete/<int:pk>/", delete_student, name="delete"),
     path("test/", test_view, name="test"),
+    path("search/", search_view, name="search"),
+    path("login/", LoginStudent.as_view(), name="login")
 ]
