@@ -62,6 +62,21 @@
                        href="{% url "students:create-teacher" %}">Create
                         teacher</a>
                 </li>
+                <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% url "students:registration" %}"> Registration</a>
+                    </li>
+                {% if user.is_authenticated %}
+                     <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% url "students:logout" %}"> Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% url "students:login" %}"> Login</a>
+                    </li>
+                {% endif %}
             </ul>
             <form class="d-flex" method="get"
                   action="{% url "students:search" %}">

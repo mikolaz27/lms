@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.forms.utils import ErrorList
 from django.shortcuts import get_object_or_404, render
@@ -9,18 +9,22 @@ from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from webargs import fields
 
-from students.forms import StudentCreateForm, TeacherBaseForm
+from students.forms import StudentCreateForm, TeacherBaseForm, \
+    RegistrationStudentForm
 from students.models import *
 from students.utils import format_records
 from django.core.exceptions import BadRequest, ValidationError
 from webargs import djangoparser
 from django.contrib.auth.models import User
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, CreateView, UpdateView
+from django.core.mail import send_mail, EmailMessage
 
 
-class IndexPage(TemplateView):
+class IndexPage(LoginRequiredMixin, TemplateView):
     template_name = "index.html"
+    login_url = reverse_lazy('students:login')
     extra_context = {'name': 'Mykhailo'}
     # http_method_names = ["post"]
     # def get(self, ):
@@ -151,6 +155,7 @@ class UpdateStudent(UpdateView):
     fields = "__all__"
     success_url = reverse_lazy("students:list")
 
+
 @csrf_exempt
 def update_student(request, pk):
     student = get_object_or_404(Student, id=pk)
@@ -231,5 +236,30 @@ def search_view(request):
         context={"students_list": students},
     )
 
+
 class LoginStudent(LoginView):
     pass
+
+
+class LogoutStudent(LogoutView):
+    template_name = 'registration/logged_out.html'
+
+
+class RegistrationStudent(CreateView):
+    form_class = RegistrationStudentForm
+    template_name = "registration/registration.html"
+    success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.is_active = False
+        self.object.save()
+        return super().form_valid(form)
+
+
+def send_email(request):
+    email = EmailMessage(subject='Registration from LMS',
+                         body="Test text",
+                         to=['alexfoxalt@gmail.com'])
+    email.send()
+    return HttpResponse('Done')

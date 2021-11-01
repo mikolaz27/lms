@@ -22,7 +22,8 @@ from students.views import (
     delete_student,
     create_teacher,
     test_view,
-    search_view, CreateStudent, UpdateStudent, LoginStudent
+    search_view, CreateStudent, UpdateStudent, LoginStudent,
+    RegistrationStudent, LogoutStudent, send_email
 )
 
 app_name = "students"
@@ -35,5 +36,8 @@ urlpatterns = [
     path("delete/<int:pk>/", delete_student, name="delete"),
     path("test/", test_view, name="test"),
     path("search/", search_view, name="search"),
-    path("login/", LoginStudent.as_view(), name="login")
+    path("login/", LoginStudent.as_view(), name="login"),
+    path("logout/", LogoutStudent.as_view(), name="logout"),
+    path("registration/", RegistrationStudent.as_view(), name="registration"),
+    path('send_email/', send_email, name='send_email')
 ]

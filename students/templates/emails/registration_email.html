@@ -1,0 +1,6 @@
+Hi {{ user.first_name }},
+
+<p>Please follow the link to complete the registration</p>
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
