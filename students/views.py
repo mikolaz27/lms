@@ -1,3 +1,4 @@
+from django.contrib.auth import login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.forms.utils import ErrorList
@@ -6,19 +7,24 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 # Create your views here.
 from django.urls import reverse, reverse_lazy
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_exempt
 from webargs import fields
 
 from students.forms import StudentCreateForm, TeacherBaseForm, \
     RegistrationStudentForm
 from students.models import *
+from students.services.emails import send_registration_email
+from students.token_generator import TokenGenerator
 from students.utils import format_records
 from django.core.exceptions import BadRequest, ValidationError
 from webargs import djangoparser
 from django.contrib.auth.models import User
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, CreateView, UpdateView
+from django.views.generic import TemplateView, CreateView, UpdateView, \
+    RedirectView
 from django.core.mail import send_mail, EmailMessage
 
 
@@ -180,40 +186,7 @@ def update_student(request, pk):
 
 
 def test_view(request):
-    # 1.
-    # my_student_1 = Course.objects.first()
-    # course = Course.objects.get(id="482fdb3c-3a7f-4750-913a-65a8b091a7ab")
-    # print(type(my_student.course))
-    # print(type(my_student_1.course))
-    # print(type(my_student.course))
-    # print(course.)
-    # students = Student.objects.filter(course__name__contains="In")
-    # print(Student.objects.filter(course=))
-    # print(Student.objects)
-    # print(type(course.students))
-
-    # for i in range(100):
-    #     new_color = Color()
-    #     new_color.name = "red"
-    #     new_color.save()
-
-    data_to_save = []
-    course = Course.objects.get(id="482fdb3c-3a7f-4750-913a-65a8b091a7ab")
-
-    for i in range(1000):
-        new_student = Student()
-        new_student.first_name = "12"
-        new_student.last_name = "12"
-        new_student.email = "test"
-        new_student.course = course
-        data_to_save.append(new_student)
-        # new_color.save()
-
-    Student.objects.bulk_create(data_to_save)
-
-    student = Student.objects.filter(course__room__color__name__contains="red")
-
-    return HttpResponse(student)
+    return HttpResponse(ExtendedUser.people.get_staff_users())
 
 
 def search_view(request):
@@ -242,7 +215,7 @@ class LoginStudent(LoginView):
 
 
 class LogoutStudent(LogoutView):
-    template_name = 'registration/logged_out.html'
+    template_name = 'registration/student_logged_out.html'
 
 
 class RegistrationStudent(CreateView):
@@ -254,7 +227,32 @@ class RegistrationStudent(CreateView):
         self.object = form.save(commit=False)
         self.object.is_active = False
         self.object.save()
+        send_registration_email(request=self.request,
+                                user_instance=self.object)
         return super().form_valid(form)
+
+
+class ActivateUser(RedirectView):
+    url = reverse_lazy('students:create-teacher')
+
+    def get(self, request, uidb64, token, *args, **kwargs):
+        print(f"uidb64: {uidb64}")
+        print(f"token: {token}")
+
+        try:
+            user_pk = force_bytes(urlsafe_base64_decode(uidb64))
+            print(f"user_pk: {user_pk}")
+            current_user = User.objects.get(pk=user_pk)
+        except (User.DoesNotExist, ValueError, TypeError):
+            return HttpResponse("Wrong data")
+
+        if current_user and TokenGenerator().check_token(current_user, token):
+            current_user.is_active = True
+            current_user.save()
+
+            login(request, current_user)
+            return super().get(request, *args, **kwargs)
+        return HttpResponse("Wrong data")
 
 
 def send_email(request):
@@ -263,3 +261,8 @@ def send_email(request):
                          to=['alexfoxalt@gmail.com'])
     email.send()
     return HttpResponse('Done')
+
+# 1. Proxy
+# 2. User profile
+# 3. AbstractUser
+# 4. BaseAbstractUser

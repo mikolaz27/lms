@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_inlinecss",
     "debug_toolbar",
     "crispy_forms",
     "phonenumber_field",
@@ -60,6 +61,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "lms.urls"
+
+# CURRENT_DOMAIN = ""
+
+LOGIN_REDIRECT_URL = '/'
 
 TEMPLATES = [
     {

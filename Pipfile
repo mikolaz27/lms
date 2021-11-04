@@ -19,6 +19,7 @@ django-crispy-forms = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
 django-debug-toolbar = "*"
+django_inlinecss = "*"
 
 [requires]
 python_version = "3.9"

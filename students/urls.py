@@ -23,7 +23,7 @@ from students.views import (
     create_teacher,
     test_view,
     search_view, CreateStudent, UpdateStudent, LoginStudent,
-    RegistrationStudent, LogoutStudent, send_email
+    RegistrationStudent, LogoutStudent, send_email, ActivateUser
 )
 
 app_name = "students"
@@ -39,5 +39,7 @@ urlpatterns = [
     path("login/", LoginStudent.as_view(), name="login"),
     path("logout/", LogoutStudent.as_view(), name="logout"),
     path("registration/", RegistrationStudent.as_view(), name="registration"),
-    path('send_email/', send_email, name='send_email')
+    path('send_email/', send_email, name='send_email'),
+    path('activate/<str:uidb64>/<str:token>', ActivateUser.as_view(),
+         name='activate')
 ]
