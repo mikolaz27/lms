@@ -63,11 +63,17 @@
                         teacher</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link"
-                           href="{% url "students:registration" %}"> Registration</a>
-                    </li>
+                    <a class="nav-link"
+                       href="{% url "students:registration" %}">
+                        Registration</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url "social:begin" 'facebook' %}">Facebook
+                        login</a>
+                </li>
                 {% if user.is_authenticated %}
-                     <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link"
                            href="{% url "students:logout" %}"> Logout</a>
                     </li>

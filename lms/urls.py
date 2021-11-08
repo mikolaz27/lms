@@ -25,11 +25,12 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("hello/", hello),
     path("students/", include("students.urls")),
+    path('oauth/', include('social_django.urls'), name='social')
 ]
 
 if settings.DEBUG:
     import debug_toolbar
 
     urlpatterns = [
-        path("__debug__/", include(debug_toolbar.urls)),
-    ] + urlpatterns
+                      path("__debug__/", include(debug_toolbar.urls)),
+                  ] + urlpatterns
