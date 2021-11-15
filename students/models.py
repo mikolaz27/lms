@@ -170,7 +170,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     phone = PhoneNumberField(blank=True, help_text="Contact phone number")
     birthdate = models.DateField(blank=True, null=True)
-    type = models.IntegerField()
+    type = models.IntegerField(blank=True, null=True)
 
     # 1 - Student,
     # 2 - Teacher
