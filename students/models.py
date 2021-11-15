@@ -105,6 +105,11 @@ class Student(Person):
         on_delete=models.SET_NULL
     )
 
+    class Meta:
+        verbose_name = "My student"
+        verbose_name_plural = "All students"
+        ordering = ['birthdate']
+
     def __str__(self):
         return f"{self.full_name()}, {self.age()}, {self.email} ({self.id})"
 

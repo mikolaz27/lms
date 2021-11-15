@@ -26,6 +26,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, CreateView, UpdateView, \
     RedirectView
 from django.core.mail import send_mail, EmailMessage
+from django.contrib import messages
 
 
 class IndexPage(LoginRequiredMixin, TemplateView):
@@ -137,10 +138,20 @@ def create_teacher(request):
         form = TeacherBaseForm(request.POST)
         if form.is_valid():
             form.save()
+            # return render(
+            #     request=request, template_name="teacher_create.html",
+            #     context={"form": form}
+            # )
             return HttpResponseRedirect(reverse("students:list"))
 
     elif request.method == "GET":
         form = TeacherBaseForm()
+
+    # messages.error()
+    # messages.info()
+    # messages.debug()
+    # messages.warning()
+    messages.error(request, "Teacher is successfully created.")
 
     return render(
         request=request, template_name="teacher_create.html",

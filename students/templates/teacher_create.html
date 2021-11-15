@@ -2,9 +2,19 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message|safe }}
+                    <a href="#" class="close">✖</a>
+                </div>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <div>
         <form method="post">
-{#            {{ csrf }}#}
+            {#            {{ csrf }}#}
             {{ form|crispy }}
             <br>
             <input class="btn btn-success" type="submit" value="Create"/>

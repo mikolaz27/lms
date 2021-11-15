@@ -22,6 +22,7 @@ django-debug-toolbar = "*"
 django_inlinecss = "*"
 Pillow = "*"
 social-auth-app-django = "*"
+django-admin-shortcuts = "*"
 
 [requires]
 python_version = "3.9"

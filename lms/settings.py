@@ -35,7 +35,10 @@ INTERNAL_IPS = [
 ]
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    'material',
+    'material.admin',
+    # 'admin_black.apps.AdminBlackConfig',
+    # "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -59,17 +62,66 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "social_django.middleware.SocialAuthExceptionMiddleware"
+    "social_django.middleware.SocialAuthExceptionMiddleware",
+    "students.middlewares.SimpleMiddleware"
 ]
 
 ROOT_URLCONF = "lms.urls"
+
+ADMIN_SHORTCUTS = [
+    {
+        'shortcuts': [
+            {
+                'url': '/',
+                'open_new_window': True,
+            },
+            {
+                'url_name': 'admin:logout',
+            },
+        ]
+    },
+    {
+        'title': 'CMS',
+        'shortcuts': [
+            {
+                'title': 'Pages',
+                'url_name': 'admin:index',
+            },
+            {
+                'title': 'Files',
+                'url_name': 'admin:index',
+            },
+            {
+                'title': 'Contact forms',
+                'icon': 'columns',
+                'url_name': 'admin:index',
+                'count_new': '3',
+            },
+            {
+                'title': 'Products',
+                'url_name': 'admin:index',
+            },
+            {
+                'title': 'Orders',
+                'url_name': 'admin:index',
+                'count_new': '12',
+            },
+        ]
+    },
+]
+ADMIN_SHORTCUTS_SETTINGS = {
+    'show_on_all_pages': True,
+    'hide_app_list': True,
+    'open_new_window': False,
+}
+
+# SESSION_COOKIE_AGE = 10
 
 AUTH_USER_MODEL = "students.CustomUser"
 # CURRENT_DOMAIN = ""
 
 SOCIAL_AUTH_FACEBOOK_KEY = "317531139806489"
 SOCIAL_AUTH_FACEBOOK_SECRET = "34371b4a2981d8aacffc703237c62c38"
-
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
